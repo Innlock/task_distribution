@@ -1,0 +1,5 @@
+Временный: 
+1. Получите OAuth-токен в сервисе Яндекс.OAuth. Для этого перейдите по ссылке: https://oauth.yandex.ru/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb
+2. Обменяйте OAuth-токен на IAM-токен:
+curl -d "{\"yandexPassportOauthToken\":\"<OAuth-токен>\"}" "https://iam.api.cloud.yandex.net/iam/v1/tokens" --ssl-no-revoke
+3. Authorization: Bearer <IAM-токен>

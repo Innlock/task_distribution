@@ -1,8 +1,8 @@
 from werkzeug.security import generate_password_hash
 
-from models import Service, User
+from models import User
 from init import db, app
-from sqlalchemy import inspect
+from sqlalchemy import inspect, Column, Integer, String, ForeignKey, Float, Numeric
 
 services_data = [
     "обработка (услуги администрирования)",
@@ -21,11 +21,11 @@ def drop_all_tables():
         db.drop_all()
 
 
-def fill_services():
-    for service_name in services_data:
-        service = Service(name=service_name)
-        db.session.add(service)
-    db.session.commit()
+# def fill_services():
+#     for service_name in services_data:
+#         service = Service(name=service_name)
+#         db.session.add(service)
+#     db.session.commit()
 
 
 def fill_users():

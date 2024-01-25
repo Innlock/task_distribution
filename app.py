@@ -3,7 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import drop_all_tables
-from models import User, Service
+from models import User
 from init import app, db, login_manager
 
 
@@ -70,10 +70,10 @@ def logout():
 
 
 # Роут для страницы услуг
-@app.route('/services')
+@app.route('/test')
 @login_required
 def services():
-    return "Страница услуг для клиента"
+    return "Страница"
 
 
 if __name__ == '__main__':
