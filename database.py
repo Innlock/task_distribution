@@ -41,12 +41,11 @@ with app.app_context():
     # проверить, существует ли таблица и выставить флаг, если нет
     inspector = inspect(db.engine)
     if "user" not in inspector.get_table_names():
-        fill_user_table = True
+        fill_tables = True
 
     # создать таблицы
     db.create_all()
 
     # заполнить таблицы, если они только созданы
-    if fill_user_table:
-        fill_services()
+    if fill_tables:
         fill_users()
