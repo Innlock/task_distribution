@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, json
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import drop_all_tables
-from models import User
+from models import User, Task
 from init import app, db, login_manager
 
 
@@ -19,10 +19,20 @@ def index():
     users = User.query.all()
     for user in users:
         users_list.append({
-            'username': user.username,
+            'login': user.login,
             'password': user.password
         })
-    return jsonify(users_list)
+
+    task_list = []
+    tasks = Task.query.all()
+    for task in tasks:
+        task_list.append({
+            'task_id': task.task_id,
+            'summary': task.summary
+        })
+    res = [users_list, task_list]
+    res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
+    return res
 
 
 # Роут для регистрации
@@ -67,13 +77,6 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-# Роут для страницы услуг
-@app.route('/test')
-@login_required
-def services():
-    return "Страница"
 
 
 if __name__ == '__main__':

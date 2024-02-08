@@ -10,7 +10,8 @@ class User(UserMixin, db.Model):
     user_id = Column(Integer, primary_key=True)
     login = Column(String(80), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
-    assignee_id = relationship('Assignee', back_populates="user", uselist=False)  # lazy='dynamic'
+    assignee_id = Column(Integer, ForeignKey('assignees.assignee_id'))
+    # assignee = relationship('Assignee', back_populates="user", uselist=False) # lazy='dynamic'
 
 
 # Исполнители
@@ -20,7 +21,8 @@ class Assignee(db.Model):
     name = Column(String(250), nullable=False)
     level = Column(Integer, default=1)  # Насколько сложные задачи решает
     rate = Column(Numeric, default=1.0)  # Ставка
-    user_id = relationship('User', back_populates="assignee")
+    # user_id = relationship('User', back_populates="assignee")
+    tasks = relationship('Task', back_populates='assignee')
 
 
 # Очереди
@@ -34,16 +36,19 @@ class Queue(db.Model):
 class Task(db.Model):
     __tablename__ = 'tasks'
     task_id = Column(Integer, primary_key=True)
-    priority = Column(Integer, default=1)  # Приоритетность задачи
+    summary = Column(String(50), nullable=False)  # Название задачи в трекере
+    priority = Column(Integer, default=1)  # Приоритетность задачи (1-5)
     estimation = Column(Integer, default=1)  # Сложность задачи
-    assignee_id = relationship('Assignee', back_populates="task", uselist=False)
+    tracker_id = Column(String(24), nullable=False)  # ID задачи в трекере
+    assignee_id = Column(Integer, ForeignKey('assignees.assignee_id'))
+    assignee = relationship('Assignee', back_populates='tasks')
 
 
 # Спринты
 class Sprint(db.Model):
     __tablename__ = 'sprints'
     sprint_id = Column(Integer, primary_key=True)
-    date = Column(DateTime, nullable=False)  # Дата спринта (для сопоставления с датами задач) -- Мб сделать номер??
+    date = Column(Integer, nullable=False)  # Номер спринта (для сопоставления с датами задач)
 
 
 # Тэги (для классификации задач)
@@ -61,32 +66,32 @@ class Component(db.Model):
 
 
 # Таблицы связей мн к мн
-assignee_queue = Table('assignee_queue',
+assignee_queue = db.Table('assignee_queue',
                        db.Column('assignee_id', Integer, ForeignKey('assignees.assignee_id')),
                        db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
                        )
 
-queue_task = Table('queue_task',
+queue_task = db.Table('queue_task',
                    db.Column('task_id', Integer, ForeignKey('tasks.task_id')),
                    db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
                    )
 
-task_sprint = Table('task_sprint',
+task_sprint = db.Table('task_sprint',
                     db.Column('task_id', Integer, ForeignKey('tasks.task_id')),
                     db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
                     )
 
-task_tag = Table('task_tag',
+task_tag = db.Table('task_tag',
                  db.Column('task_id', Integer, ForeignKey('tasks.task_id')),
                  db.Column('tag_id', Integer, ForeignKey('tags.tag_id'))
                  )
 
-task_component = Table('task_component',
+task_component = db.Table('task_component',
                        db.Column('task_id', Integer, ForeignKey('tasks.task_id')),
                        db.Column('component_id', Integer, ForeignKey('components.component_id'))
                        )
 
-assignee_component = Table('assignee_component',
+assignee_component = db.Table('assignee_component',
                            db.Column('assignee_id', Integer, ForeignKey('assignees.assignee_id')),
                            db.Column('component_id', Integer, ForeignKey('components.component_id'))
                            )
