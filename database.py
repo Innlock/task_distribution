@@ -1,10 +1,10 @@
-from werkzeug.security import generate_password_hash
 from api_requests import get_all_tasks
 from json_parsing import get_tasks_fields
-
+from sqlalchemy import inspect, Column, Integer, String, ForeignKey, Float, Numeric
 from models import User, Task
 from init import db, app
-from sqlalchemy import inspect, Column, Integer, String, ForeignKey, Float, Numeric
+from settings.database_users_init import initialize_assignees, initialize_users
+
 
 
 def drop_all_tables():
@@ -23,16 +23,6 @@ def update_tasks_from_tracker():
     db.session.commit()
 
 
-password = generate_password_hash("123", salt_length=8)
-user_data = [["user1", password], ["user2", password]]
-
-
-def fill_users():
-    for user in user_data:
-        u = User(login=user[0], password=user[1])
-        db.session.add(u)
-    db.session.commit()
-
 
 drop_all_tables()
 fill_tables = False
@@ -47,6 +37,6 @@ with app.app_context():
 
     # заполнить таблицы, если они только созданы
     if fill_tables:
-        pass
-        fill_users()
+        initialize_assignees()
+        initialize_users()
         update_tasks_from_tracker()
