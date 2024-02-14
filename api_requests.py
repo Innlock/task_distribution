@@ -47,6 +47,27 @@ def get_all_assignees():
     data = response.json()
     count = response.headers.get('X-Total-Count')
     if response.status_code == 200:
-        return int(count)-bots, data[bots:]
+        return int(count) - bots, data[bots:]
     return None
 
+
+def get_all_qsc(get_what):  # sprints/queues/components
+    session = requests.Session()
+    url = f"https://api.tracker.yandex.net//v2/{get_what}"
+
+    session.headers.update(head)
+    response = session.get(url)
+    data = response.json()
+    count = response.headers.get('X-Total-Count')
+    if response.status_code == 200:
+        return int(count), data
+    return None
+
+
+def get_qsc(get_what, get_what_id):  # sprints/queues/components
+    session = requests.Session()
+    url = f"https://api.tracker.yandex.net//v2/{get_what}/{get_what_id}"
+    session.headers.update(head)
+    response = session.get(url)
+    data = response.json()
+    return data

@@ -47,20 +47,22 @@ class Task(db.Model):
 class Sprint(db.Model):
     __tablename__ = 'sprints'
     sprint_id = Column(Integer, primary_key=True)  # ID в трекере
-    date = Column(Integer, nullable=False)  # Номер спринта (для сопоставления с датами задач)
-
-
-# Тэги (для классификации задач)
-class Tag(db.Model):
-    __tablename__ = 'tags'
-    tag_id = Column(Integer, primary_key=True)  # ID в трекере
     name = Column(String(250), nullable=False)
+    startDate = Column(DateTime, nullable=False)
+    endDate = Column(DateTime, nullable=False)
+
+
+# # Тэги (для классификации задач)
+# class Tag(db.Model):
+#     __tablename__ = 'tags'
+#     tag_id = Column(Integer, primary_key=True)
+#     name = Column(String(250), nullable=False)
 
 
 # Сфера задачи/сотрудника (например, бекенд/фронтенд)
 class Component(db.Model):
     __tablename__ = 'components'
-    component_id = Column(Integer, primary_key=True)
+    component_id = Column(Integer, primary_key=True)  # ID в трекере
     name = Column(String(250), nullable=False)
 
 
@@ -80,10 +82,10 @@ task_sprint = db.Table('task_sprint',
                     db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
                     )
 
-task_tag = db.Table('task_tag',
-                 db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                 db.Column('tag_id', Integer, ForeignKey('tags.tag_id'))
-                 )
+# task_tag = db.Table('task_tag',
+#                  db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
+#                  db.Column('tag_id', Integer, ForeignKey('tags.tag_id'))
+#                  )
 
 task_component = db.Table('task_component',
                        db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
