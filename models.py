@@ -72,7 +72,7 @@ assignee_queue = db.Table('assignee_queue',
                        db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
                        )
 
-queue_task = db.Table('queue_task',
+task_queue = db.Table('task_queue',
                    db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
                    db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
                    )

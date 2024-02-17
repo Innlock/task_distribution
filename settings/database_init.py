@@ -1,9 +1,11 @@
+from sqlalchemy.dialects.postgresql import insert
 from werkzeug.security import generate_password_hash
 
 from init import db
-from models import Assignee, User, Task, Sprint, Component, Queue
+from models import Assignee, User, Task, Sprint, Component, Queue, task_queue, task_sprint, task_component
 from api_requests import get_all_assignees, get_all_tasks, get_all_qsc
-from json_parsing import get_assignees_fields, get_tasks_fields, get_sprints_fields, get_components_fields, get_queues_fields
+from json_parsing import get_assignees_fields, get_tasks_fields, get_sprints_fields, get_components_fields, \
+    get_queues_fields
 
 
 def initialize_assignees():
@@ -78,7 +80,19 @@ def initialize_tasks_from_tracker(queue=None):
         task_params, other_tables = get_tasks_fields(data[i])
         task = Task(**task_params)
         db.session.add(task)
-        # to do: создать все связи задач с др таблицами
+        db.session.commit()
+
+        if other_tables.get("queue"):
+            queue = insert(task_queue).values(other_tables["queue"])
+            db.session.execute(queue)
+        if other_tables.get("components"):
+            for component in other_tables["components"]:
+                comp = insert(task_component).values(component)
+                db.session.execute(comp)
+        if other_tables.get("sprints"):
+            for sprint in other_tables["sprints"]:
+                sp = insert(task_sprint).values(sprint)
+                db.session.execute(sp)
     db.session.commit()
 
 

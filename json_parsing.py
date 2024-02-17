@@ -30,7 +30,8 @@ def get_task_connections(data):
 
     if data.get("queue"):
         queue = {
-            'id': int(data["queue"]["id"]),
+            'task_id': data["id"],
+            'queue_id': int(data["queue"]["id"]),
         }
         tables["queue"] = queue
 
@@ -42,16 +43,18 @@ def get_task_connections(data):
         components = []
         for component in data["components"]:
             comp = {
-                'id': int(component["id"]),
+                'task_id': data["id"],
+                'component_id': int(component["id"]),
             }
             components.append(comp)
         tables["components"] = components
 
-    if data.get("sprints"):
+    if data.get("sprint"):
         sprints = []
-        for sprint in data["sprints"]:
+        for sprint in data["sprint"]:
             comp = {
-                'id': int(sprint["id"]),
+                'task_id': data["id"],
+                'sprint_id': int(sprint["id"]),
             }
             sprints.append(comp)
         tables["sprints"] = sprints
