@@ -68,19 +68,19 @@ class Component(db.Model):
 
 # Таблицы связей мн к мн
 assignee_queue = db.Table('assignee_queue',
-                       db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
-                       db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
-                       )
+                          db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
+                          db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
+                          )
 
 task_queue = db.Table('task_queue',
-                   db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                   db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
-                   )
+                      db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
+                      db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
+                      )
 
 task_sprint = db.Table('task_sprint',
-                    db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                    db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
-                    )
+                       db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
+                       db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
+                       )
 
 # task_tag = db.Table('task_tag',
 #                  db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
@@ -88,14 +88,14 @@ task_sprint = db.Table('task_sprint',
 #                  )
 
 task_component = db.Table('task_component',
-                       db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                       db.Column('component_id', Integer, ForeignKey('components.component_id'))
-                       )
+                          db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
+                          db.Column('component_id', Integer, ForeignKey('components.component_id'))
+                          )
 
 assignee_component = db.Table('assignee_component',
-                           db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
-                           db.Column('component_id', Integer, ForeignKey('components.component_id'))
-                           )
+                              db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
+                              db.Column('component_id', Integer, ForeignKey('components.component_id'))
+                              )
 
 
 # Таблицы на время работы пользователя с приложением

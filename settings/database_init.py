@@ -1,11 +1,11 @@
 from sqlalchemy.dialects.postgresql import insert
 from werkzeug.security import generate_password_hash
+import random
 
 from init import db
-from models import Assignee, User, Task, Sprint, Component, Queue, task_queue, task_sprint, task_component
+from models import *
 from api_requests import get_all_assignees, get_all_tasks, get_all_qsc
-from json_parsing import get_assignees_fields, get_tasks_fields, get_sprints_fields, get_components_fields, \
-    get_queues_fields
+from json_parsing import *
 
 
 def initialize_assignees():
@@ -28,6 +28,30 @@ def initialize_first_assignee(assignees_data):
     }
     a = Assignee(**first_assignee_data)
     db.session.add(a)
+    db.session.commit()
+
+
+def initialise_assignee_connections():
+    assignees = Assignee.query.all()
+    queues = Queue.query.all()
+    components = Component.query.all()
+    for assignee in assignees:
+        values = {
+            'assignee_id': assignee.assignee_id,
+            'queue_id': random.choice(queues).queue_id
+        }
+        a_q = insert(assignee_queue).values(values)
+        db.session.execute(a_q)
+
+        num_components = random.randint(1, len(components))
+        random_components = random.sample(components, num_components)
+        for component in random_components:
+            values = {
+                'assignee_id': assignee.assignee_id,
+                'component_id': component.component_id
+            }
+            a_c = insert(assignee_component).values(values)
+            db.session.execute(a_c)
     db.session.commit()
 
 
@@ -103,3 +127,4 @@ def initialize_database():
     initialize_queues_from_tracker()
     initialize_sprints_from_tracker()
     initialize_tasks_from_tracker()
+    initialise_assignee_connections()
