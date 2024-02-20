@@ -37,6 +37,7 @@ class Task(db.Model):
     __tablename__ = 'tasks'
     task_id = Column(String(24), primary_key=True)  # ID задачи в трекере
     summary = Column(String(50), nullable=False)  # Название задачи в трекере
+    key = Column(String(50), nullable=False)  # Ключ задачи в трекере (для обращения к задаче  позже)
     priority = Column(Integer, default=1)  # Приоритетность задачи (1-5)
     estimation = Column(Integer, default=1)  # Сложность задачи
     assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'))

@@ -21,8 +21,8 @@ def initialize_assignees():
 
 def initialize_first_assignee(assignees_data):
     first_assignee_data = {
-        'assignee_id': assignees_data[0]["uid"],
-        'name': assignees_data[0]["login"],
+        'assignee_id': assignees_data[0]['uid'],
+        'name': assignees_data[0]['login'],
         'level': 5,
         'rate': 1,
     }
@@ -55,16 +55,16 @@ def initialise_assignee_connections():
     db.session.commit()
 
 
-password = generate_password_hash("123", salt_length=8)
+password = generate_password_hash('123', salt_length=8)
 
 
 def initialize_users():
     count, assignees_data = get_all_assignees()
     user = assignees_data[0]
     user_data = {
-        'login': user["login"],
+        'login': user['login'],
         'password': password,
-        'assignee_id': "8000000000000005"
+        'assignee_id': '8000000000000005'
     }
     u = User(**user_data)
     db.session.add(u)
@@ -72,7 +72,7 @@ def initialize_users():
 
 
 def initialize_sprints_from_tracker():
-    count, data = get_all_qsc("sprints")
+    count, data = get_all_qsc('sprints')
     for i in range(count):
         sprints_params = get_sprints_fields(data[i])
         sprint = Sprint(**sprints_params)
@@ -81,7 +81,7 @@ def initialize_sprints_from_tracker():
 
 
 def initialize_components_from_tracker():
-    count, data = get_all_qsc("components")
+    count, data = get_all_qsc('components')
     for i in range(count):
         components_params = get_components_fields(data[i])
         component = Component(**components_params)
@@ -90,7 +90,7 @@ def initialize_components_from_tracker():
 
 
 def initialize_queues_from_tracker():
-    count, data = get_all_qsc("queues")
+    count, data = get_all_qsc('queues')
     for i in range(count):
         queues_params = get_queues_fields(data[i])
         queue = Queue(**queues_params)
@@ -106,15 +106,15 @@ def initialize_tasks_from_tracker(queue=None):
         db.session.add(task)
         db.session.commit()
 
-        if other_tables.get("queue"):
-            queue = insert(task_queue).values(other_tables["queue"])
+        if other_tables.get('queue'):
+            queue = insert(task_queue).values(other_tables['queue'])
             db.session.execute(queue)
-        if other_tables.get("components"):
-            for component in other_tables["components"]:
+        if other_tables.get('components'):
+            for component in other_tables['components']:
                 comp = insert(task_component).values(component)
                 db.session.execute(comp)
-        if other_tables.get("sprints"):
-            for sprint in other_tables["sprints"]:
+        if other_tables.get('sprints'):
+            for sprint in other_tables['sprints']:
                 sp = insert(task_sprint).values(sprint)
                 db.session.execute(sp)
     db.session.commit()

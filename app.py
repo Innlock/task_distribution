@@ -28,7 +28,8 @@ def index():
     for task in tasks:
         task_list.append({
             'task_id': task.task_id,
-            'summary': task.summary
+            'summary': task.summary,
+            'key': task.key,
         })
     res = [users_list, task_list]
     res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
