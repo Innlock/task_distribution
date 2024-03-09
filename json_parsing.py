@@ -1,4 +1,34 @@
 import random
+import isodate
+from datetime import timedelta
+
+
+def parse_work_time_to_normal_time(work_days):
+    if work_days is None:
+        return None
+    work_days = isodate.parse_duration(work_days)
+    normal_days = work_days.days
+    if work_days.days > 6:
+        normal_days = work_days.days // 7 * 5 + work_days.days % 7
+
+    normal_hours = work_days - timedelta(days=work_days.days)
+    days_to_hours = timedelta(hours=normal_days * 8)
+    normal_time = normal_hours + days_to_hours
+    return isodate.duration_isoformat(normal_time)
+
+
+def parse_normal_time_to_work_time(normal_days):
+    if normal_days is None:
+        return None
+    normal_days = isodate.parse_duration(normal_days)
+    normal_hours = normal_days.seconds // 3600 + normal_days.days * 24
+    work_seconds = normal_days.seconds % 3600
+    work_days = normal_hours // 8
+    work_hours = normal_hours % 8
+    if work_days > 4:
+        work_days = work_days // 5 * 7 + work_days % 5
+    work_time = timedelta(days=work_days, hours=work_hours, seconds=work_seconds)
+    return isodate.duration_isoformat(work_time)
 
 
 def get_tasks_fields(data=None):
@@ -20,6 +50,10 @@ def get_tasks_fields(data=None):
         'key': data['key'],
         'summary': data['summary'],
         'priority': int(data['priority']['id']),
+        'complexity': int(data['storyPoints']),
+        'status': data['status']['key'],
+        'estimation': parse_work_time_to_normal_time(data.get('estimation', None)),
+        'time_spent': parse_work_time_to_normal_time(data.get('spent', None)),
         'assignee_id': data.get('assignee', {}).get('id', None)
     }
     tables = get_task_connections(data)
@@ -35,10 +69,6 @@ def get_task_connections(data):
             'queue_id': int(data['queue']['id']),
         }
         tables['queue'] = queue
-
-    # if data.get('tags'):
-    #     tags = data['tags']
-    #     tables['tags'] = tags
 
     if data.get('components'):
         components = []

@@ -11,7 +11,6 @@ class User(UserMixin, db.Model):
     login = Column(String(80), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
     assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'))
-    # assignee = relationship('Assignee', back_populates="user", uselist=False) # lazy='dynamic'
 
 
 # Исполнители
@@ -21,7 +20,6 @@ class Assignee(db.Model):
     name = Column(String(250), nullable=False)
     level = Column(Integer, default=1)  # Насколько сложные и срочные задачи решает (1-5)
     rate = Column(Numeric, default=1.0)  # Ставка [1, 0.5]
-    # user_id = relationship('User', back_populates="assignee")
     tasks = relationship('Task', back_populates='assignee')
 
 
@@ -39,7 +37,10 @@ class Task(db.Model):
     summary = Column(String(50), nullable=False)  # Название задачи в трекере
     key = Column(String(50), nullable=False)  # Ключ задачи в трекере (для обращения к задаче  позже)
     priority = Column(Integer, default=1)  # Приоритетность задачи (1-5)
-    estimation = Column(Integer, default=1)  # Сложность задачи
+    complexity = Column(Integer, default=1)  # Сложность задачи (1-5)
+    status = Column(String(50), nullable=False)  # Статус задачи (open/inProgress/needInfo)
+    estimation = Column(String(50))  # Оценка времени задачи (ISO 8601 duration string) в реальном времени
+    time_spent = Column(String(50))  # Потраченное на задачу время (ISO 8601 duration string) в реальном времени
     assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'))
     assignee = relationship('Assignee', back_populates='tasks')
 
@@ -51,13 +52,6 @@ class Sprint(db.Model):
     name = Column(String(250), nullable=False)
     startDate = Column(DateTime, nullable=False)
     endDate = Column(DateTime, nullable=False)
-
-
-# # Тэги (для классификации задач)
-# class Tag(db.Model):
-#     __tablename__ = 'tags'
-#     tag_id = Column(Integer, primary_key=True)
-#     name = Column(String(250), nullable=False)
 
 
 # Сфера задачи/сотрудника (например, бекенд/фронтенд)
@@ -82,11 +76,6 @@ task_sprint = db.Table('task_sprint',
                        db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
                        db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
                        )
-
-# task_tag = db.Table('task_tag',
-#                  db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-#                  db.Column('tag_id', Integer, ForeignKey('tags.tag_id'))
-#                  )
 
 task_component = db.Table('task_component',
                           db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
