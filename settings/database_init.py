@@ -1,6 +1,8 @@
 from sqlalchemy.dialects.postgresql import insert
 from werkzeug.security import generate_password_hash
 import random
+from datetime import datetime
+import json
 
 from init import db
 from models import *
@@ -38,7 +40,7 @@ def initialise_assignee_connections():
     for assignee in assignees:
         values = {
             'assignee_id': assignee.assignee_id,
-            'queue_id': random.choice(queues).queue_id
+            'queue_id': 3  # random.choice(queues).queue_id
         }
         a_q = insert(assignee_queue).values(values)
         db.session.execute(a_q)
@@ -55,10 +57,8 @@ def initialise_assignee_connections():
     db.session.commit()
 
 
-password = generate_password_hash('123', salt_length=8)
-
-
-def initialize_users():
+def initialize_users_dummies():
+    password = generate_password_hash('123', salt_length=8)
     count, assignees_data = get_all_assignees()
     user = assignees_data[0]
     user_data = {
@@ -120,11 +120,78 @@ def initialize_tasks_from_tracker(queue=None):
     db.session.commit()
 
 
+def initialize_sprints_dummies():
+    sprints = [
+        {
+            'sprint_id': 1,
+            'name': 'sprint 1',
+            'startDate': datetime(2024, 1, 8),
+            'endDate': datetime(2024, 1, 14),
+        },
+        {
+            'sprint_id': 2,
+            'name': 'sprint 2',
+            'startDate': datetime(2024, 1, 15),
+            'endDate': datetime(2024, 1, 21),
+        },
+        {
+            'sprint_id': 3,
+            'name': 'sprint 3',
+            'startDate': datetime(2024, 1, 22),
+            'endDate': datetime(2024, 1, 28),
+        },
+        {
+            'sprint_id': 4,
+            'name': 'sprint 4',
+            'startDate': datetime(2024, 1, 29),
+            'endDate': datetime(2024, 2, 4),
+        },
+        {
+            'sprint_id': 5,
+            'name': 'sprint 5',
+            'startDate': datetime(2024, 2, 5),
+            'endDate': datetime(2024, 2, 11),
+        },
+    ]
+    for sprint in sprints:
+        spr = Sprint(**sprint)
+        db.session.add(spr)
+    db.session.commit()
+
+
+def initialize_tasks_dummies():
+    with open("./settings/tasks_dummies.json") as file:
+        data = json.load(file)
+        tasks = data['tasks']
+
+    for task in tasks:
+        t = Task(**task.get('task'))
+        db.session.add(t)
+        db.session.commit()
+
+        queue = insert(task_queue).values(task.get('queue'))
+        db.session.execute(queue)
+
+        sprint = insert(task_sprint).values(task.get('sprint'))
+        db.session.execute(sprint)
+
+        for component in task.get('components'):
+            comp = insert(task_component).values(component)
+            db.session.execute(comp)
+
+    db.session.commit()
+
+
 def initialize_database():
     initialize_assignees()
-    initialize_users()
+    initialize_users_dummies()
+
     initialize_components_from_tracker()
     initialize_queues_from_tracker()
     initialize_sprints_from_tracker()
-    initialize_tasks_from_tracker()
+
+    initialize_sprints_dummies()
+    initialize_tasks_dummies()
+
+    initialize_tasks_from_tracker('OCERED')
     initialise_assignee_connections()

@@ -83,11 +83,11 @@ def get_task_connections(data):
     if data.get('sprint'):
         sprints = []
         for sprint in data['sprint']:
-            comp = {
+            spr = {
                 'task_id': data['id'],
                 'sprint_id': int(sprint['id']),
             }
-            sprints.append(comp)
+            sprints.append(spr)
         tables['sprints'] = sprints
 
     return tables
