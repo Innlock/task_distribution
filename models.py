@@ -107,12 +107,12 @@ class Assignment(db.Model):
     assignment_id = db.Column(db.Integer, primary_key=True)  # Номер распределения на случай если их будет много
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     queue_id = db.Column(db.Integer, db.ForeignKey('queues.queue_id'))
+    name = db.Column(db.String(250))
 
 
 # Распределение задач между сотрудниками
-class TaskAssignee(db.Model):
-    __tablename__ = 'assignee_task_temp'
-    id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.String(24), db.ForeignKey('tasks.task_id'))
-    assignee_id = db.Column(db.String(16), db.ForeignKey('assignees.assignee_id'))
-    assignment_id = db.Column(db.Integer, db.ForeignKey('assignment_temp.assignment_id'))
+assignee_task_temp = db.Table('assignee_task_temp',
+                              db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
+                              db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
+                              db.Column('assignment_id', Integer, ForeignKey('assignment_temp.assignment_id'))
+                              )
