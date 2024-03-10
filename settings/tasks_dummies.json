@@ -993,9 +993,9 @@
         "summary": "dummy-35",
         "priority": 2,
         "complexity": 2,
-        "status": "done",
+        "status": "inProgress",
         "estimation": "PT2H",
-        "time_spent": "PT3H",
+        "time_spent": "PT1H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -1014,6 +1014,32 @@
         {
           "task_id": "dummy-35",
           "component_id": 11
+        }
+      ]
+    },
+    {
+      "task": {
+        "task_id": "dummy-36",
+        "key": "dummy-36",
+        "summary": "dummy-36",
+        "priority": 2,
+        "complexity": 2,
+        "status": "inProgress",
+        "time_spent": "PT1H",
+        "assignee_id": "8000000000000008"
+      },
+      "queue": {
+        "task_id": "dummy-36",
+        "queue_id": 3
+      },
+      "sprint": {
+        "task_id": "dummy-36",
+        "sprint_id": 4
+      },
+      "components": [
+        {
+          "task_id": "dummy-36",
+          "component_id": 12
         }
       ]
     }

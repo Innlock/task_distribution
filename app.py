@@ -3,8 +3,9 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import drop_all_tables
-from models import User, Task
+from models import *
 from init import app, db, login_manager
+from distibution import *
 
 
 @login_manager.user_loader

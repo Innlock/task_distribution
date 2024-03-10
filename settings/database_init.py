@@ -42,7 +42,7 @@ def initialise_assignee_connections():
             'assignee_id': assignee.assignee_id,
             'queue_id': 3  # random.choice(queues).queue_id
         }
-        a_q = insert(assignee_queue).values(values)
+        a_q = insert(AssigneesQueues).values(values)
         db.session.execute(a_q)
 
         num_components = random.randint(1, len(components))
@@ -52,7 +52,7 @@ def initialise_assignee_connections():
                 'assignee_id': assignee.assignee_id,
                 'component_id': component.component_id
             }
-            a_c = insert(assignee_component).values(values)
+            a_c = insert(AssigneesComponents).values(values)
             db.session.execute(a_c)
     db.session.commit()
 
@@ -107,15 +107,15 @@ def initialize_tasks_from_tracker(queue=None):
         db.session.commit()
 
         if other_tables.get('queue'):
-            queue = insert(task_queue).values(other_tables['queue'])
+            queue = insert(TasksQueues).values(other_tables['queue'])
             db.session.execute(queue)
         if other_tables.get('components'):
             for component in other_tables['components']:
-                comp = insert(task_component).values(component)
+                comp = insert(TasksComponents).values(component)
                 db.session.execute(comp)
         if other_tables.get('sprints'):
             for sprint in other_tables['sprints']:
-                sp = insert(task_sprint).values(sprint)
+                sp = insert(TasksSprints).values(sprint)
                 db.session.execute(sp)
     db.session.commit()
 
@@ -169,21 +169,61 @@ def initialize_tasks_dummies():
         db.session.add(t)
         db.session.commit()
 
-        queue = insert(task_queue).values(task.get('queue'))
+        queue = insert(TasksQueues).values(task.get('queue'))
         db.session.execute(queue)
 
-        sprint = insert(task_sprint).values(task.get('sprint'))
+        sprint = insert(TasksSprints).values(task.get('sprint'))
         db.session.execute(sprint)
 
         for component in task.get('components'):
-            comp = insert(task_component).values(component)
+            comp = insert(TasksComponents).values(component)
             db.session.execute(comp)
 
     db.session.commit()
 
 
+def initialize_assignees_dummies():
+    assignees = [
+        {
+            'assignee_id': '8000000000000004',
+            'name': 'annachistozvonova',
+            'level': 5,
+            'rate': 1
+        },
+        {
+            'assignee_id': '8000000000000005',
+            'name': 'chistozvnovaam1',
+            'level': 3,
+            'rate': 1
+        },
+        {
+            'assignee_id': '8000000000000006',
+            'name': 'org.handsome',
+            'level': 1,
+            'rate': 0.5
+        },
+        {
+            'assignee_id': '8000000000000008',
+            'name': 'len.ivan2',
+            'level': 3,
+            'rate': 1
+        },
+        {
+            'assignee_id': '8000000000000009',
+            'name': 'yekaterina.nikitina83',
+            'level': 2,
+            'rate': 0.5
+        }
+    ]
+    for assignee in assignees:
+        a = Assignee(**assignee)
+        db.session.add(a)
+    db.session.commit()
+
+
 def initialize_database():
-    initialize_assignees()
+    # initialize_assignees()
+    initialize_assignees_dummies()
     initialize_users_dummies()
 
     initialize_components_from_tracker()

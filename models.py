@@ -36,8 +36,8 @@ class Task(db.Model):
     task_id = Column(String(24), primary_key=True)  # ID задачи в трекере
     summary = Column(String(50), nullable=False)  # Название задачи в трекере
     key = Column(String(50), nullable=False)  # Ключ задачи в трекере (для обращения к задаче  позже)
-    priority = Column(Integer, default=1)  # Приоритетность задачи (1-5)
-    complexity = Column(Integer, default=1)  # Сложность задачи (1-5)
+    priority = Column(Integer, default=3)  # Приоритетность задачи (1-5)
+    complexity = Column(Integer, default=3)  # Сложность задачи (1-5)
     status = Column(String(50), nullable=False)  # Статус задачи (open/inProgress/needInfo)
     estimation = Column(String(50))  # Оценка времени задачи (ISO 8601 duration string) в реальном времени
     time_spent = Column(String(50))  # Потраченное на задачу время (ISO 8601 duration string) в реальном времени
@@ -62,30 +62,34 @@ class Component(db.Model):
 
 
 # Таблицы связей мн к мн
-assignee_queue = db.Table('assignee_queue',
-                          db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
-                          db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
-                          )
+class AssigneesQueues(db.Model):
+    __tablename__ = "assignees_queues"
+    assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'), primary_key=True)
+    queue_id = Column(Integer, ForeignKey('queues.queue_id'), primary_key=True)
 
-task_queue = db.Table('task_queue',
-                      db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                      db.Column('queue_id', Integer, ForeignKey('queues.queue_id'))
-                      )
 
-task_sprint = db.Table('task_sprint',
-                       db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                       db.Column('sprint_id', Integer, ForeignKey('sprints.sprint_id'))
-                       )
+class TasksQueues(db.Model):
+    __tablename__ = "tasks_queues"
+    task_id = Column(String(24), ForeignKey('tasks.task_id'), primary_key=True)
+    queue_id = Column(Integer, ForeignKey('queues.queue_id'), primary_key=True)
 
-task_component = db.Table('task_component',
-                          db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                          db.Column('component_id', Integer, ForeignKey('components.component_id'))
-                          )
 
-assignee_component = db.Table('assignee_component',
-                              db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
-                              db.Column('component_id', Integer, ForeignKey('components.component_id'))
-                              )
+class TasksSprints(db.Model):
+    __tablename__ = "tasks_sprints"
+    task_id = Column(String(24), ForeignKey('tasks.task_id'), primary_key=True)
+    sprint_id = Column(Integer, ForeignKey('sprints.sprint_id'), primary_key=True)
+
+
+class TasksComponents(db.Model):
+    __tablename__ = "tasks_components"
+    task_id = Column(String(24), ForeignKey('tasks.task_id'), primary_key=True)
+    component_id = Column(Integer, ForeignKey('components.component_id'), primary_key=True)
+
+
+class AssigneesComponents(db.Model):
+    __tablename__ = "assignees_components"
+    assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'), primary_key=True)
+    component_id = Column(Integer, ForeignKey('components.component_id'), primary_key=True)
 
 
 # Таблицы на время работы пользователя с приложением
