@@ -91,22 +91,24 @@ def get_available_assignee(estimation, assignees_id, assignees_work_time):
     if len(assignees_id) == 1:
         return find_assignee_by_id(assignee_id)
 
+    assignees = []
     for assign_id, worktime in assignees_work_time.items():
         if assign_id in assignees_id and worktime >= estimation:
-            # можно тут еще смотреть на оставшееся рабочее время
-            return find_assignee_by_id(assign_id)
-
-    return None
+            assignees.append(assign_id)
+    return get_assignee_with_more_worktime(assignees, assignees_work_time)
 
 
-# def get_assignee_with_more_worktime(assignees, assignees_work_time):
-#     assignee_with_more_worktime = assignees[0]
-#     worktime = assignees_work_time[assignee_with_more_worktime]
-#     for assignee in assignees:
-#         if assignees_work_time[assignee] > worktime:
-#             assignee_with_more_worktime = assignee
-#             worktime = assignees_work_time[assignee]
-#     return assignee_with_more_worktime
+def get_assignee_with_more_worktime(assignees, assignees_work_time):
+    if not assignees:
+        return None
+    assignee_with_more_worktime = assignees[0]
+    worktime = assignees_work_time[assignee_with_more_worktime]
+    for assignee in assignees:
+        if assignees_work_time[assignee] > worktime:
+            assignee_with_more_worktime = assignee
+            worktime = assignees_work_time[assignee]
+    return assignee_with_more_worktime
+
 
 def distribute_open_tasks(distribution, assignees, assignees_work_time, queue_id, sprint_id=None):
     tasks_for_distribution = get_tasks_for_distribution(queue_id, sprint_id)
