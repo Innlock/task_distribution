@@ -32,8 +32,12 @@ def index():
             'summary': task.summary,
             'key': task.key,
         })
-    res = [users_list, task_list]
-    res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
+    distribution = get_tasks_distribution(3)
+    res = []
+    for assignee, tasks in distribution.items():
+        res.append({assignee.name if isinstance(assignee, Assignee) else assignee: [task.key for task in tasks]})
+    # res = [users_list, task_list]
+    # res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
     return res
 
 

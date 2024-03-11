@@ -117,3 +117,5 @@ with app.app_context():
     # заполнить таблицы, если они только созданы
     if init_fill_tables:
         initialize_database()
+    # from distibution import get_tasks_distribution
+    # print(get_tasks_distribution(3))
