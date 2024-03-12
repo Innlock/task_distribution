@@ -9,3 +9,6 @@ The main function of the portal is to provide a platform for distribution of tas
 ## Install
 
 to do
+
+## Testing:
+Перейти в папку проекта, запустить контейнер с БД и выполнить `pytest .\testing\test_distribution.py`.

@@ -36,9 +36,9 @@ class Task(db.Model):
     task_id = Column(String(24), primary_key=True)  # ID задачи в трекере
     summary = Column(String(50), nullable=False)  # Название задачи в трекере
     key = Column(String(50), nullable=False)  # Ключ задачи в трекере (для обращения к задаче  позже)
+    status = Column(String(50), nullable=False)  # Статус задачи (open/inProgress/needInfo)
     priority = Column(Integer, default=3)  # Приоритетность задачи (1-5)
     complexity = Column(Integer, default=3)  # Сложность задачи (1-5)
-    status = Column(String(50), nullable=False)  # Статус задачи (open/inProgress/needInfo)
     estimation = Column(String(50))  # Оценка времени задачи (ISO 8601 duration string) в реальном времени
     time_spent = Column(String(50))  # Потраченное на задачу время (ISO 8601 duration string) в реальном времени
     assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'))

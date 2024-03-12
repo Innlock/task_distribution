@@ -13,14 +13,12 @@ def get_all_assignees():
     return assignees
 
 
-def get_tasks_in_progress(queue_id, sprint_id=None):
+def get_tasks_in_progress(queue_id):
     tasks = db.session.query(Task) \
         .filter((Task.status == "inProgress") & (Task.assignee_id is not None)) \
         .join(TasksQueues) \
         .filter(TasksQueues.queue_id == queue_id) \
         .join(TasksComponents)
-    if sprint_id is not None:
-        tasks = tasks.join(TasksSprints).filter(TasksSprints.sprint_id == sprint_id)
     return tasks.all()
 
 
@@ -103,7 +101,7 @@ def update_tasks_from_tracker(queue=None):
     db.session.commit()
 
 
-# drop_all_tables()
+drop_all_tables()
 init_fill_tables = False
 with app.app_context():
     # проверить, существует ли таблица и выставить флаг, если нет
