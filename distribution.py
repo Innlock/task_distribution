@@ -27,16 +27,21 @@ def get_assignees_worktime(assignees):
     return worktime
 
 
-def fill_tasks_in_progress(queue_id, sprint_id, distribution, worktime):
-    tasks_in_progress = get_tasks_in_progress(queue_id, sprint_id)
+def fill_tasks_in_progress(tasks_in_progress, distribution, worktime, assignees):
     for task in tasks_in_progress:
-        estimation = task.estimation
-        if estimation:
-            worktime.update({task.assignee_id: worktime[task.assignee_id] - isodate.parse_duration(estimation)})
-        else:
-            pass
-        assignee = find_assignee_by_id(task.assignee_id)
-        distribution[assignee].append(task)
+        if task.estimation and task.assignee_id:
+            worktime.update({task.assignee_id: worktime[task.assignee_id] - isodate.parse_duration(task.estimation)})
+            assignee = assignee_by_id(task.assignee_id, assignees)
+            if assignee:
+                distribution[assignee].append(task)
+    return distribution
+
+
+def assignee_by_id(assignee_id, assignees):
+    for assignee in assignees:
+        if assignee.assignee_id == assignee_id:
+            return assignee
+    return None
 
 
 def get_assignees_vector_dir(assignees, components):
@@ -110,8 +115,7 @@ def get_assignee_with_more_worktime(assignees, assignees_work_time):
     return assignee_with_more_worktime
 
 
-def distribute_open_tasks(distribution, assignees, assignees_work_time, queue_id, sprint_id=None):
-    tasks_for_distribution = get_tasks_for_distribution(queue_id, sprint_id)
+def distribute_open_tasks(distribution, assignees, assignees_work_time, tasks_for_distribution):
     components = get_all_components()
     assignees_vector_dir = get_assignees_vector_dir(assignees, components)
 
@@ -140,8 +144,11 @@ def get_tasks_distribution(queue_id, sprint_id=None):
     assignees = get_all_assignees()
     distribution = create_template(assignees)
     assignees_work_time = get_assignees_worktime(assignees)
-    fill_tasks_in_progress(queue_id, sprint_id, distribution, assignees_work_time)
+
+    tasks_in_progress = get_tasks_in_progress(queue_id, sprint_id)
+    distribution = fill_tasks_in_progress(tasks_in_progress, distribution, assignees_work_time, assignees)
 
     # Распределить остальные задачи
-    distribution = distribute_open_tasks(distribution, assignees, assignees_work_time, queue_id, sprint_id)
+    tasks_for_distribution = get_tasks_for_distribution(queue_id, sprint_id)
+    distribution = distribute_open_tasks(distribution, assignees, assignees_work_time, tasks_for_distribution)
     return distribution

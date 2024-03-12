@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from database import drop_all_tables
 from models import *
 from init import app, db, login_manager
-from distibution import *
+from distribution import *
 
 
 @login_manager.user_loader

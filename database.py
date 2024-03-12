@@ -103,12 +103,12 @@ def update_tasks_from_tracker(queue=None):
     db.session.commit()
 
 
-drop_all_tables()
+# drop_all_tables()
 init_fill_tables = False
 with app.app_context():
     # проверить, существует ли таблица и выставить флаг, если нет
     inspector = inspect(db.engine)
-    if "user" not in inspector.get_table_names():
+    if "users" not in inspector.get_table_names():
         init_fill_tables = True
 
     # создать таблицы
@@ -117,5 +117,3 @@ with app.app_context():
     # заполнить таблицы, если они только созданы
     if init_fill_tables:
         initialize_database()
-    # from distibution import get_tasks_distribution
-    # print(get_tasks_distribution(3))
