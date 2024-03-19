@@ -85,6 +85,14 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/distribution', methods=['GET', 'POST'])
+def distribution():
+    if request.method == 'POST':
+        pass
+    distribution_data = get_tasks_distribution(3)
+    return render_template('distribution.html', distribution=distribution_data)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     # app.run(debug=True, host='0.0.0.0', port=5000)

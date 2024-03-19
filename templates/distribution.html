@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Распределение задач</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            transition: border-left-color 0.3s ease;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .task {
+            border: 1px solid #ccc;
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            cursor: move;
+        }
+
+        .drop-zone {
+            min-height: 50px;
+            border: 2px dashed #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            {% for performer, tasks in distribution.items() %}
+                <th>{{ performer.name if performer != 'NotAssigned' else "Задачи без исполнителя" }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for performer, tasks in distribution.items() %}
+                <td class="drop-zone">
+                    {% for task in tasks %}
+                        <div class="task" draggable="true">
+                            {{ task.summary }}
+                        </div>
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tasks = document.querySelectorAll(".task");
+
+        let draggedTask = null;
+
+        tasks.forEach(task => {
+            task.addEventListener("dragstart", dragStart);
+            task.addEventListener("dragend", dragEnd);
+        });
+
+        function dragStart(event) {
+            draggedTask = this;
+            event.dataTransfer.setData("text/plain", event.target.innerHTML);
+        }
+
+        function dragEnd() {
+            draggedTask = null;
+        }
+
+        document.querySelectorAll(".drop-zone").forEach(dropZone => {
+            dropZone.addEventListener("dragover", dragOver);
+            dropZone.addEventListener("dragenter", dragEnter);
+            dropZone.addEventListener("drop", drop);
+        });
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function dragEnter(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            if (draggedTask) {
+                this.appendChild(draggedTask);
+            }
+        }
+    });
+</script>
+</body>
+</html>
