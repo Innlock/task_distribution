@@ -53,7 +53,7 @@ def get_tasks_fields(data=None):
         'complexity': int(data['storyPoints']),
         'status': data['status']['key'],
         'estimation': parse_work_time_to_normal_time(data.get('estimation', None)),
-        'time_spent': parse_work_time_to_normal_time(data.get('spent', None)),
+        # 'time_spent': parse_work_time_to_normal_time(data.get('spent', None)),
         'assignee_id': data.get('assignee', {}).get('id', None)
     }
     tables = get_task_connections(data)

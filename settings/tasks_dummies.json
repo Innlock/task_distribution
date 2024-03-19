@@ -9,7 +9,6 @@
         "complexity": 5,
         "status": "done",
         "estimation": "PT8H",
-        "time_spent": "PT16H",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -40,7 +39,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -71,7 +69,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT4H30M",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -98,7 +95,6 @@
         "complexity": 5,
         "status": "done",
         "estimation": "PT16H",
-        "time_spent": "PT18H30M",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -133,7 +129,6 @@
         "complexity": 5,
         "status": "done",
         "estimation": "PT18H",
-        "time_spent": "PT20H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -168,7 +163,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT2H",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -195,7 +189,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT3H",
-        "time_spent": "PT2H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -222,7 +215,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT3H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -249,7 +241,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT4H",
         "assignee_id": "8000000000000009"
       },
       "queue": {
@@ -280,7 +271,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT4H",
         "assignee_id": "8000000000000009"
       },
       "queue": {
@@ -311,7 +301,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT5H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -338,7 +327,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -369,7 +357,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT4H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -396,7 +383,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT15H",
-        "time_spent": "PT12H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -423,7 +409,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -450,7 +435,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT10H",
-        "time_spent": "PT8H",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -477,7 +461,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -508,7 +491,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT4H30M",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -535,7 +517,6 @@
         "complexity": 5,
         "status": "done",
         "estimation": "PT16H",
-        "time_spent": "PT20H30M",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -570,7 +551,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT18H",
-        "time_spent": "PT19H",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -605,7 +585,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT2H",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -632,7 +611,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT3H",
-        "time_spent": "PT2H30M",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -659,7 +637,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT30M",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -686,7 +663,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT3H10M",
         "assignee_id": "8000000000000009"
       },
       "queue": {
@@ -717,7 +693,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT2H15M",
         "assignee_id": "8000000000000009"
       },
       "queue": {
@@ -748,7 +723,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT4H",
-        "time_spent": "PT5H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -775,7 +749,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H20M",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -806,7 +779,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT30M",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -833,7 +805,6 @@
         "complexity": 4,
         "status": "done",
         "estimation": "PT14H",
-        "time_spent": "PT12H",
         "assignee_id": "8000000000000005"
       },
       "queue": {
@@ -860,7 +831,6 @@
         "complexity": 3,
         "status": "done",
         "estimation": "PT5H",
-        "time_spent": "PT6H10M",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -887,7 +857,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT3H30M",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -914,7 +883,6 @@
         "complexity": 2,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT30M",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -941,7 +909,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT1H",
-        "time_spent": "PT30M",
         "assignee_id": "8000000000000004"
       },
       "queue": {
@@ -968,7 +935,6 @@
         "complexity": 1,
         "status": "done",
         "estimation": "PT2H",
-        "time_spent": "PT1H",
         "assignee_id": "8000000000000006"
       },
       "queue": {
@@ -995,7 +961,6 @@
         "complexity": 2,
         "status": "inProgress",
         "estimation": "PT2H",
-        "time_spent": "PT1H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
@@ -1025,7 +990,6 @@
         "priority": 2,
         "complexity": 2,
         "status": "inProgress",
-        "time_spent": "PT1H",
         "assignee_id": "8000000000000008"
       },
       "queue": {
