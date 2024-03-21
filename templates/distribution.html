@@ -18,39 +18,41 @@
         }
 
         .container {
-            width: 80%;
-            background-color: #fff;
+            width: 100%;
+            background-color: #F7F9FF;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
             margin-bottom: 20px;
             transition: border-left-color 0.3s ease;
         }
 
         th, td {
-            border: 1px solid #ccc;
+            border: 1px solid #424656;
             padding: 10px;
             text-align: left;
         }
 
         .task {
+            background-color: #E6F4F1;
             border: 1px solid #ccc;
             padding: 5px;
             margin-bottom: 5px;
-            background-color: #f9f9f9;
             cursor: move;
         }
 
         .drop-zone {
-            min-height: 50px;
-            border: 2px dashed #ccc;
+            height: 200px;
+            border: hidden;
             margin-bottom: 10px;
             padding: 10px;
+            overflow-y: auto;
         }
 
     </style>
@@ -61,7 +63,11 @@
         <thead>
         <tr>
             {% for performer, tasks in distribution.items() %}
-                <th>{{ performer.name if performer != 'NotAssigned' else "Задачи без исполнителя" }}</th>
+                {% if performer == 'NotAssigned' %}
+                    <th style="background-color: #8190BB">Задачи без исполнителя</th>
+                {% else %}
+                    <th>{{ performer.name }}</th>
+                {% endif %}
             {% endfor %}
         </tr>
         </thead>
@@ -71,7 +77,14 @@
                 <td class="drop-zone">
                     {% for task in tasks %}
                         <div class="task" draggable="true">
-                            {{ task.summary }}
+                            <div><strong>{{ task.summary }}</strong></div>
+                            {% if task.priority > 4 %}
+                                <div style="color: #CB4565"><em>Приоритет:</em> {{ task.priority }}</div>
+                            {% else %}
+                                <div><em>Приоритет:</em> {{ task.priority }}</div>
+                            {% endif %}
+                            <div><em>Оценка сложности:</em> {{ task.complexity }}</div>
+                            <div><em>Оценка времени:</em> {{ task.estimation }}</div>
                         </div>
                     {% endfor %}
                 </td>
