@@ -4,76 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Распределение задач</title>
-    <style>
-        body {
-            display: flex;
-            flex-wrap: wrap;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #424656;
-        }
-
-        .container {
-            width: 80%;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            transition: border-left-color 0.3s ease;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .task {
-            border: 1px solid #ccc;
-            padding: 5px;
-            margin-bottom: 5px;
-            background-color: #f9f9f9;
-            cursor: move;
-        }
-
-        .drop-zone {
-            min-height: 50px;
-            border: 2px dashed #ccc;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-
-    </style>
 </head>
+
 <body>
 <div class="container">
-    <table>
+    <table class="table-container">
         <thead>
         <tr>
             {% for performer, tasks in distribution.items() %}
-                <th>{{ performer.name if performer != 'NotAssigned' else "Задачи без исполнителя" }}</th>
+                {% if performer == 'NotAssigned' %}
+                    <th style="background-color: #398E89">Задачи без исполнителя</th>
+                {% else %}
+                    <th>{{ performer.name }}</th>
+                {% endif %}
             {% endfor %}
         </tr>
         </thead>
         <tbody>
         <tr>
             {% for performer, tasks in distribution.items() %}
-                <td class="drop-zone">
-                    {% for task in tasks %}
-                        <div class="task" draggable="true">
-                            {{ task.summary }}
-                        </div>
-                    {% endfor %}
+                <td>
+                    <div class="column-container">
+                        {% for task in tasks %}
+                            <div draggable="true" class="task">
+                                <div><strong>{{ task.summary }}</strong></div>
+                                {% if task.priority > 4 %}
+                                    <div style="color: #D19EA4"><em>Приоритет:</em> {{ task.priority }}</div>
+                                {% else %}
+                                    <div><em>Приоритет:</em> {{ task.priority }}</div>
+                                {% endif %}
+                                <div><em>Оценка сложности:</em> {{ task.complexity }}</div>
+                                <div><em>Оценка времени:</em> {{ task.estimation }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </td>
             {% endfor %}
         </tr>
@@ -101,7 +65,7 @@
             draggedTask = null;
         }
 
-        document.querySelectorAll(".drop-zone").forEach(dropZone => {
+        document.querySelectorAll(".column-container").forEach(dropZone => {
             dropZone.addEventListener("dragover", dragOver);
             dropZone.addEventListener("dragenter", dragEnter);
             dropZone.addEventListener("drop", drop);
@@ -125,3 +89,65 @@
 </script>
 </body>
 </html>
+
+<style>
+    body {
+        display: flex;
+        flex-wrap: wrap;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        weight: 100vh;
+        background-color: #05386B;
+    }
+
+    .container {
+        width: 100%;
+        height: 80%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .table-container {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .table-container th {
+        text-align: left;
+        background-color: #379683;
+        color: #F7F9FF;
+        padding: 8px;
+        border: 1px solid #424656;
+    }
+
+    .table-container td {
+        background-color: #EDF5E1;
+        vertical-align: top;
+    }
+
+    .column-container {
+        flex-grow: 1;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 5px;
+        overflow-y: auto;
+        height: 100%;
+    }
+
+    .task {
+        background-color: #8EE4AF;
+        color: #05386B;
+        padding: 5px;
+        margin-bottom: 5px;
+        cursor: move;
+        border-radius: 5px;
+    }
+
+</style>
