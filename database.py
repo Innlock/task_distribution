@@ -101,6 +101,13 @@ def update_tasks_from_tracker(queue=None):
     db.session.commit()
 
 
+def login_in_assignees(username):
+    assignee = db.session.query(Assignee).filter(Assignee.name == username).first()
+    if assignee is None:
+        return False
+    return True
+
+
 drop_all_tables()
 init_fill_tables = False
 with app.app_context():

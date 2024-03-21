@@ -13,32 +13,41 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+def get_current_id():
+    if current_user.is_authenticated:
+        user_id = current_user.user_id
+        return user_id
+    return None
+
+
 # Роут для главной страницы
 @app.route('/')
 def index():
-    users_list = []
-    users = User.query.all()
-    for user in users:
-        users_list.append({
-            'login': user.login,
-            'password': user.password
-        })
-
-    task_list = []
-    tasks = Task.query.all()
-    for task in tasks:
-        task_list.append({
-            'task_id': task.task_id,
-            'summary': task.summary,
-            'key': task.key,
-        })
-    distribution = get_tasks_distribution(3)
-    res = []
-    for assignee, tasks in distribution.items():
-        res.append({assignee.name if isinstance(assignee, Assignee) else assignee: [task.key for task in tasks]})
-    # res = [users_list, task_list]
-    # res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
-    return res
+    # distribution = get_tasks_distribution(3)
+    # res = []
+    # for assignee, tasks in distribution.items():
+    #     res.append({assignee.name if isinstance(assignee, Assignee) else assignee: [task.key for task in tasks]})
+    #
+    # # users_list = []
+    # # users = User.query.all()
+    # # for user in users:
+    # #     users_list.append({
+    # #         'login': user.login,
+    # #         'password': user.password
+    # #     })
+    # # task_list = []
+    # # tasks = Task.query.all()
+    # # for task in tasks:
+    # #     task_list.append({
+    # #         'task_id': task.task_id,
+    # #         'summary': task.summary,
+    # #         'key': task.key,
+    # #     })
+    # # res = [users_list, task_list]
+    # # res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
+    # return res
+    distribution_data = get_tasks_distribution(3)
+    return render_template('distribution.html', distribution=distribution_data)
 
 
 # Роут для регистрации
@@ -49,12 +58,16 @@ def register():
         password = request.form['password']
 
         # Проверка наличия пользователя с таким именем
-        existing_user = User.query.filter_by(username=username).first()
+        existing_user = User.query.filter_by(login=username).first()
         if existing_user:
-            return "Пользователь с таким именем уже существует."
+            return render_template('register.html',
+                                   error="Пользователь с таким логином уже существует")
+        if not login_in_assignees(username):
+            return render_template('register.html',
+                                   error="Логин не зарегистрирован в организации")
 
         # Создание нового пользователя
-        new_user = User(username=username, password=generate_password_hash(password, salt_length=8))
+        new_user = User(login=username, password=generate_password_hash(password, salt_length=8))
         db.session.add(new_user)
         db.session.commit()
 
@@ -70,10 +83,11 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(login=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('index'))
+            return redirect(url_for('distribution'))
+        return render_template('login.html', error="Неверный логин или пароль")
     return render_template('login.html')
 
 
