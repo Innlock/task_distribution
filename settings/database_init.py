@@ -214,60 +214,60 @@ def initialize_assignees_dummies():
             'level': 2,
             'rate': 0.5
         },
-        {
-            'assignee_id': '8000000000000010',
-            'name': 'annachistozvonova',
-            'level': 5,
-            'rate': 1
-        },
-        {
-            'assignee_id': '8000000000000011',
-            'name': 'chistozvnovaam1',
-            'level': 3,
-            'rate': 1
-        },
-        {
-            'assignee_id': '8000000000000012',
-            'name': 'org.handsome',
-            'level': 1,
-            'rate': 0.5
-        },
-        {
-            'assignee_id': '8000000000000013',
-            'name': 'len.ivan2',
-            'level': 3,
-            'rate': 1
-        },
-        {
-            'assignee_id': '8000000000000015',
-            'name': 'yekaterina.nikitina83',
-            'level': 2,
-            'rate': 0.5
-        },
-        {
-            'assignee_id': '8000000000000016',
-            'name': 'chistozvnovaam1',
-            'level': 3,
-            'rate': 1
-        },
-        {
-            'assignee_id': '8000000000000017',
-            'name': 'org.handsome',
-            'level': 1,
-            'rate': 0.5
-        },
-        {
-            'assignee_id': '8000000000000018',
-            'name': 'len.ivan2',
-            'level': 3,
-            'rate': 1
-        },
-        {
-            'assignee_id': '8000000000000014',
-            'name': 'yekaterina.nikitina83',
-            'level': 2,
-            'rate': 0.5
-        }
+        # {
+        #     'assignee_id': '8000000000000010',
+        #     'name': 'annachistozvonova',
+        #     'level': 5,
+        #     'rate': 1
+        # },
+        # {
+        #     'assignee_id': '8000000000000011',
+        #     'name': 'chistozvnovaam1',
+        #     'level': 3,
+        #     'rate': 1
+        # },
+        # {
+        #     'assignee_id': '8000000000000012',
+        #     'name': 'org.handsome',
+        #     'level': 1,
+        #     'rate': 0.5
+        # },
+        # {
+        #     'assignee_id': '8000000000000013',
+        #     'name': 'len.ivan2',
+        #     'level': 3,
+        #     'rate': 1
+        # },
+        # {
+        #     'assignee_id': '8000000000000015',
+        #     'name': 'yekaterina.nikitina83',
+        #     'level': 2,
+        #     'rate': 0.5
+        # },
+        # {
+        #     'assignee_id': '8000000000000016',
+        #     'name': 'chistozvnovaam1',
+        #     'level': 3,
+        #     'rate': 1
+        # },
+        # {
+        #     'assignee_id': '8000000000000017',
+        #     'name': 'org.handsome',
+        #     'level': 1,
+        #     'rate': 0.5
+        # },
+        # {
+        #     'assignee_id': '8000000000000018',
+        #     'name': 'len.ivan2',
+        #     'level': 3,
+        #     'rate': 1
+        # },
+        # {
+        #     'assignee_id': '8000000000000014',
+        #     'name': 'yekaterina.nikitina83',
+        #     'level': 2,
+        #     'rate': 0.5
+        # }
     ]
     for assignee in assignees:
         a = Assignee(**assignee)

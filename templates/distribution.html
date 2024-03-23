@@ -7,16 +7,42 @@
 </head>
 
 <body>
+<header class="header">
+    <p class="dist_name">{{ "Распределение для очереди "+ queue }}{{ ", спринт " + sprint if sprint else "" }}</p>
+    <div class="dist_buttons">
+        <button class="icons" title="Вернуться к выбору очереди">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/return.png') }}"
+                 alt='Вернуться к выбору очереди'>
+        </button>
+        <button class="icons" title="Сбросить распределение">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/undo.png') }}"
+                 alt='Сбросить распределение'>
+        </button>
+        <button class="icons" title="Сохранить распределение">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/save.png') }}"
+                 alt='Сохранить распределение'>
+        </button>
+        <button class="icons" title="Выбрать сохранненное распределение">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/menu.png') }}"
+                 alt='Выбрать сохранненное распределение'>
+        </button>
+        <button class="icons" title="Утвердить распределение">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/approve.png') }}"
+                 alt='Утвердить распределение'>
+        </button>
+        <a href="/logout" class="icons" title="Выйти из аккаунта">
+            <img class="icons_img" src="{{ url_for('static', filename='pictures/logout.png') }}"
+                 alt='Выйти из аккаунта'>
+        </a>
+    </div>
+</header>
+
 <div class="container">
     <table class="table-container">
         <thead>
         <tr>
             {% for performer, tasks in distribution.items() %}
-                {% if performer == 'NotAssigned' %}
-                    <th style="background-color: #398E89">Задачи без исполнителя</th>
-                {% else %}
-                    <th>{{ performer.name }}</th>
-                {% endif %}
+                <th>{{ performer.name if performer != 'NotAssigned' else "Задачи без исполнителя" }}</th>
             {% endfor %}
         </tr>
         </thead>
@@ -24,19 +50,25 @@
         <tr>
             {% for performer, tasks in distribution.items() %}
                 <td>
-                    <div class="column-container">
-                        {% for task in tasks %}
-                            <div draggable="true" class="task">
-                                <div><strong>{{ task.summary }}</strong></div>
-                                {% if task.priority > 4 %}
-                                    <div style="color: #D19EA4"><em>Приоритет:</em> {{ task.priority }}</div>
-                                {% else %}
-                                    <div><em>Приоритет:</em> {{ task.priority }}</div>
-                                {% endif %}
-                                <div><em>Оценка сложности:</em> {{ task.complexity }}</div>
-                                <div><em>Оценка времени:</em> {{ task.estimation }}</div>
-                            </div>
-                        {% endfor %}
+                    {% if performer == 'NotAssigned' %}
+                        <div class="column-container no_assignee">
+                    {% else %}
+                        <div class="column-container">
+                    {% endif %}
+                    {% for task in tasks %}
+                        <div draggable="true" class="task">
+                            <div><u><strong>{{ task.summary }}</strong></u></div>
+                            {% if task.priority == 4 %}
+                                <div class="priority4">Приоритет: {{ task.priority }}</div>
+                            {% elif task.priority == 5 %}
+                                <div class="priority5">Приоритет: {{ task.priority }}</div>
+                            {% else %}
+                                <div>Приоритет: {{ task.priority }}</div>
+                            {% endif %}
+                            <div>Оценка сложности: {{ task.complexity }}</div>
+                            <div>Оценка времени: {{ task.estimation }}</div>
+                        </div>
+                    {% endfor %}
                     </div>
                 </td>
             {% endfor %}
@@ -91,24 +123,87 @@
 </html>
 
 <style>
+    /* Шапка */
+    .header {
+        height: 10%;
+        width: 100vw;
+        align-items: center;
+        display: flex;
+        color: #F7F9FF;
+    }
+
+    .dist_name {
+        min-width: 40%;
+        font-size: 1.7vw;
+        text-align: left;
+        padding-left: 1vw;
+    }
+
+    .dist_buttons {
+        display: flex;
+        max-width: 40%;
+        max-height: 70%;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .icons {
+        border: none; /* Убираем границу */
+        background: none; /* Убираем фон */
+        padding: 0; /* Убираем внутренние отступы */
+        margin: 0; /* Убираем внешние отступы */
+        font: inherit; /* Используем наследуемый шрифт */
+        cursor: pointer; /* Делаем курсор указателем */
+        color: inherit; /* Используем наследуемый цвет текста */
+        text-decoration: none; /* Убираем подчеркивание */
+    }
+
+    .icons:hover {
+        cursor: pointer;
+    }
+
+    .icons_img {
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .logout icons_img {
+        max-width: inherit;
+        max-height: inherit;
+        display: block;
+    }
+
+    {#button:hover::before, a:hover::before {#}
+    {#    content: attr(data-title);#}
+    {#    position: absolute;#}
+    {#    background-color: #F7F9FF;#}
+    {#    color: #424656;#}
+    {#    padding: 1px;#}
+    {#    border-radius: 1px;#}
+    {#    font-family: "Roboto", sans-serif;#}
+    {#    font-size: 12px;#}
+    {#}#}
+
+
+    /* Основные элементы */
     body {
         display: flex;
+        flex-direction: column;
         flex-wrap: wrap;
-        font-family: Arial, sans-serif;
+        font-family: "Roboto", sans-serif;
         margin: 0;
         padding: 0;
-        justify-content: center;
         align-items: center;
         height: 100vh;
-        weight: 100vh;
-        background-color: #05386B;
+        background-color: #424656;
     }
 
     .container {
         width: 100%;
-        height: 80%;
+        height: 90%;
         overflow: hidden;
         position: relative;
+        overflow-x: auto;
     }
 
     .table-container {
@@ -120,16 +215,21 @@
     }
 
     .table-container th {
-        text-align: left;
-        background-color: #379683;
+        text-align: center;
+        background-color: #398E89;
         color: #F7F9FF;
         padding: 8px;
         border: 1px solid #424656;
     }
 
     .table-container td {
-        background-color: #EDF5E1;
+        background-color: #C9CDE0;
         vertical-align: top;
+        width: 230px;
+    }
+
+    .table-container th {
+        width: 230px;
     }
 
     .column-container {
@@ -142,12 +242,53 @@
     }
 
     .task {
-        background-color: #8EE4AF;
-        color: #05386B;
+        background-color: #F7F9FF;
+        color: black;
         padding: 5px;
         margin-bottom: 5px;
         cursor: move;
-        border-radius: 5px;
+    }
+
+    /* доп оформление полей приоритета и задач без исполнителей */
+    .priority4 {
+        color: #c47d00;
+    }
+
+    .priority5 {
+        color: #a6122f;
+    }
+
+    .column-container.no_assignee * {
+        opacity: 0.75;
+    }
+
+    /* Стилизация ползунков */
+    .container::-webkit-scrollbar {
+        width: 3px; /* Ширина ползунка */
+        height: 10px;
+        background-color: #C9CDE0;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+        background-color: #398E89; /* Цвет ползунка */
+        border-radius: 6px; /* Скругление углов ползунка */
+    }
+
+    .container::-webkit-scrollbar-thumb:hover {
+        background-color: #245956; /* Цвет ползунка при наведении */
+    }
+
+    .column-container::-webkit-scrollbar {
+        width: 5px; /* Ширина ползунка */
+    }
+
+    .column-container::-webkit-scrollbar-thumb {
+        background-color: #398E89; /* Цвет ползунка */
+        border-radius: 6px; /* Скругление углов ползунка */
+    }
+
+    .column-container::-webkit-scrollbar-thumb:hover {
+        background-color: #245956; /* Цвет ползунка при наведении */
     }
 
 </style>

@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="https://github.com/Innlock/task_distribution/blob/main/pictures/icon_white_background.png" width="10%">
+  <img src="https://github.com/Innlock/task_distribution/blob/main/static/pictures/icon_white_background.png" width="10%">
 </p>
 
 # Task distribution

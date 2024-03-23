@@ -23,6 +23,7 @@ def get_current_id():
 # Роут для главной страницы
 @app.route('/')
 def index():
+    return redirect('/login')
     # distribution = get_tasks_distribution(3)
     # res = []
     # for assignee, tasks in distribution.items():
@@ -46,8 +47,9 @@ def index():
     # # res = [users_list, task_list]
     # # res = Response(json.dumps(res, ensure_ascii=False).encode('utf-8'), content_type='application/json;charset=utf-8')
     # return res
-    distribution_data = get_tasks_distribution(3)
-    return render_template('distribution.html', distribution=distribution_data)
+    # # distribution_data = get_tasks_distribution(3)
+    # # return render_template('distribution.html', distribution=distribution_data, queue="3", sprint="spr")
+
 
 
 # Роут для регистрации
@@ -100,11 +102,12 @@ def logout():
 
 
 @app.route('/distribution', methods=['GET', 'POST'])
+@login_required
 def distribution():
     if request.method == 'POST':
         pass
     distribution_data = get_tasks_distribution(3)
-    return render_template('distribution.html', distribution=distribution_data)
+    return render_template('distribution.html', distribution=distribution_data, queue="3")
 
 
 if __name__ == '__main__':
