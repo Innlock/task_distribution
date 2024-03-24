@@ -150,7 +150,7 @@
     .icons {
         border: none; /* Убираем границу */
         background: none; /* Убираем фон */
-        padding: 0; /* Убираем внутренние отступы */
+        padding: 5px; /* Убираем внутренние отступы */
         margin: 0; /* Убираем внешние отступы */
         font: inherit; /* Используем наследуемый шрифт */
         cursor: pointer; /* Делаем курсор указателем */
@@ -160,11 +160,14 @@
 
     .icons:hover {
         cursor: pointer;
+        opacity: 0.60;
     }
 
     .icons_img {
-        max-width: 90%;
-        max-height: 90%;
+        max-width: 100%;
+        max-height: 100%;
+        align-items: center;
+        display: flex;
     }
 
     .logout icons_img {
