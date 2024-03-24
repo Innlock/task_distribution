@@ -133,7 +133,8 @@
     }
 
     .dist_name {
-        min-width: 40%;
+        width: 40%;
+        min-width: 20%;
         font-size: 1.7vw;
         text-align: left;
         padding-left: 1vw;
@@ -141,21 +142,25 @@
 
     .dist_buttons {
         display: flex;
-        max-width: 40%;
-        max-height: 70%;
+        width: 40%;
+        max-width: 80%;
+        max-height: 80%;
         margin-left: auto;
         margin-right: 0;
+        align-items: center;
     }
 
     .icons {
-        border: none; /* Убираем границу */
-        background: none; /* Убираем фон */
-        padding: 5px; /* Убираем внутренние отступы */
-        margin: 0; /* Убираем внешние отступы */
-        font: inherit; /* Используем наследуемый шрифт */
-        cursor: pointer; /* Делаем курсор указателем */
-        color: inherit; /* Используем наследуемый цвет текста */
-        text-decoration: none; /* Убираем подчеркивание */
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        cursor: pointer;
+        color: inherit;
+        text-decoration: none;
+        max-width: 100%;
+        max-height: 100%;
     }
 
     .icons:hover {
@@ -164,28 +169,11 @@
     }
 
     .icons_img {
-        max-width: 100%;
-        max-height: 100%;
-        align-items: center;
+        max-width: 75%;
+        max-height: 75%;
         display: flex;
+        align-items: center;
     }
-
-    .logout icons_img {
-        max-width: inherit;
-        max-height: inherit;
-        display: block;
-    }
-
-    {#button:hover::before, a:hover::before {#}
-    {#    content: attr(data-title);#}
-    {#    position: absolute;#}
-    {#    background-color: #F7F9FF;#}
-    {#    color: #424656;#}
-    {#    padding: 1px;#}
-    {#    border-radius: 1px;#}
-    {#    font-family: "Roboto", sans-serif;#}
-    {#    font-size: 12px;#}
-    {#}#}
 
 
     /* Основные элементы */
