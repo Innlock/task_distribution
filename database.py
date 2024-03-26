@@ -108,6 +108,16 @@ def login_in_assignees(username):
     return True
 
 
+def get_all_queues():
+    queues = Queue.query.all()
+    return queues
+
+
+def get_all_sprints():
+    sprints = Sprint.query.all()
+    return sprints
+
+
 drop_all_tables()
 init_fill_tables = False
 with app.app_context():

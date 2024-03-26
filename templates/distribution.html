@@ -8,12 +8,12 @@
 
 <body>
 <header class="header">
-    <p class="dist_name">{{ "Распределение для очереди "+ queue }}{{ ", спринт " + sprint if sprint else "" }}</p>
+    <p class="dist_name">{{ "Распределение для очереди '"+ queue + "'" }}{{ ", спринт '" + sprint + "'" if sprint else "" }}</p>
     <div class="dist_buttons">
-        <button class="icons" title="Вернуться к выбору очереди">
+        <a href="/settings" class="icons" title="Вернуться к выбору очереди">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/return.png') }}"
                  alt='Вернуться к выбору очереди'>
-        </button>
+        </a>
         <button class="icons" title="Сбросить распределение">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/undo.png') }}"
                  alt='Сбросить распределение'>

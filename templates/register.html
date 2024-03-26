@@ -55,7 +55,6 @@
         <h3 class="sign-in">Регистрация</h3>
         <a href="/login" class="button">Войти</a>
     </div>
-    <div class="clear"></div>
     {% if error != "" %}
         <p>{{ error }}</p>
     {% endif %}
@@ -100,10 +99,6 @@
         font-family: "Roboto", sans-serif;
     }
 
-    .clear {
-        clear: both;
-    }
-
     #man-people-user, #lock-locker {
         fill: #F7F9FF;
     }
@@ -121,10 +116,6 @@
 
     form {
         position: relative;
-    }
-
-    .clear {
-        clear: both;
     }
 
     .sign-in {
@@ -160,7 +151,7 @@
         height: 30px;
         position: absolute;
         background: #F7F9FF;
-        top: 0px;
+        top: 0;
         left: 100%;
     }
 
@@ -222,6 +213,11 @@
         text-align: center;
         font-size: 0.8em;
         cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        cursor: pointer;
+        opacity: 0.80;
     }
 
     ::-moz-placeholder {

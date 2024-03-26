@@ -51,7 +51,6 @@ def index():
     # # return render_template('distribution.html', distribution=distribution_data, queue="3", sprint="spr")
 
 
-
 # Роут для регистрации
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -88,7 +87,7 @@ def login():
         user = User.query.filter_by(login=username).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('distribution'))
+            return redirect(url_for('settings'))
         return render_template('login.html', error="Неверный логин или пароль")
     return render_template('login.html')
 
@@ -106,8 +105,28 @@ def logout():
 def distribution():
     if request.method == 'POST':
         pass
-    distribution_data = get_tasks_distribution(3)
-    return render_template('distribution.html', distribution=distribution_data, queue="3")
+    queue_text = request.form.get('queue')
+    sprint_text = request.form.get('sprint')
+
+    queue_id, queue_name = queue_text.split("_")
+    queue_id = int(queue_id)
+    print(queue_id, queue_name)
+
+    sprint_id, sprint_name = None, ""
+    if sprint_text:
+        sprint_id, sprint_name = sprint_text.split("_")
+
+    distribution_data = get_tasks_distribution(queue_id, sprint_id)
+    return render_template('distribution.html', distribution=distribution_data,
+                           queue=queue_name, sprint=sprint_name)
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    queues = get_all_queues()
+    sprints = get_all_sprints()
+    return render_template('settings.html', login=current_user.login, queues=queues, sprints=sprints)
 
 
 if __name__ == '__main__':
