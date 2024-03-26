@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify, Response, json
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -127,6 +129,22 @@ def settings():
     queues = get_all_queues()
     sprints = get_all_sprints()
     return render_template('settings.html', login=current_user.login, queues=queues, sprints=sprints)
+
+
+@app.route('/sync_data', methods=['GET', 'POST'])
+@login_required
+def sync_data():
+    success = True
+    # сделать синхронизацию данных тут
+    queues = get_all_queues()
+    sprints = get_all_sprints()
+
+    queues = [{"queue_id": queue.queue_id, "name": queue.name} for queue in queues]
+    sprints = [{"sprint_id": sprint.sprint_id, "name": sprint.name} for sprint in sprints]
+
+    # queues = [{"queue_id": 10, "name": "abob"}]
+
+    return jsonify({'success': success, 'queues': queues, 'sprints': sprints})
 
 
 if __name__ == '__main__':

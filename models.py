@@ -1,3 +1,5 @@
+from flask import json
+
 from init import db
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, Numeric, DateTime, Table
@@ -40,6 +42,10 @@ class Queue(db.Model):
     __tablename__ = 'queues'
     queue_id = Column(Integer, primary_key=True)  # ID в трекере
     name = Column(String(250), nullable=False)
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
 
     def __repr__(self):
         return f'<Очередь. Название: {self.name}'
