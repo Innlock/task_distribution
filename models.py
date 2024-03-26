@@ -43,10 +43,6 @@ class Queue(db.Model):
     queue_id = Column(Integer, primary_key=True)  # ID в трекере
     name = Column(String(250), nullable=False)
 
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
-
     def __repr__(self):
         return f'<Очередь. Название: {self.name}'
 

@@ -87,9 +87,29 @@ def find_task_by_id(task_id):
 
 
 def drop_all_tables():
+    print("Dropping all tables...")
     with app.app_context():
         db.reflect()
         db.drop_all()
+
+
+def drop_all_tables_but_users():
+    print("Dropping some tables...")
+    AssigneesComponents.query.delete()
+    AssigneesQueues.query.delete()
+
+    TasksComponents.query.delete()
+    TasksSprints.query.delete()
+    TasksQueues.query.delete()
+
+    Task.query.delete()
+    User.query.filter(User.assignee_id != None).update({'assignee_id': None})
+    Assignee.query.delete()
+
+    Sprint.query.delete()
+    Component.query.delete()
+    Queue.query.delete()
+    db.session.commit()
 
 
 def update_tasks_from_tracker(queue=None):
@@ -118,17 +138,26 @@ def get_all_sprints():
     return sprints
 
 
-drop_all_tables()
-init_fill_tables = False
-with app.app_context():
-    # проверить, существует ли таблица и выставить флаг, если нет
-    inspector = inspect(db.engine)
-    if "users" not in inspector.get_table_names():
-        init_fill_tables = True
+# Пока обновляется вся БД
+def sync_data_in_database(completely=True, assignee_id=None):
+    if completely:
+        drop_all_tables()
+    else:
+        drop_all_tables_but_users()
 
-    # создать таблицы
-    db.create_all()
+    init_fill_tables = False
+    with app.app_context():
+        # проверить, существует ли таблица и выставить флаг, если нет
+        inspector = inspect(db.engine)
+        if "users" not in inspector.get_table_names() or not completely:
+            init_fill_tables = True
 
-    # заполнить таблицы, если они только созданы
-    if init_fill_tables:
-        initialize_database()
+        # создать таблицы
+        db.create_all()
+
+        # заполнить таблицы, если они только созданы
+        if init_fill_tables:
+            initialize_database(completely)
+
+
+sync_data_in_database()

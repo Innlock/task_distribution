@@ -84,6 +84,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        sync_data_in_database()
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(login=username).first()
@@ -134,17 +135,23 @@ def settings():
 @app.route('/sync_data', methods=['GET', 'POST'])
 @login_required
 def sync_data():
-    success = True
-    # сделать синхронизацию данных тут
-    queues = get_all_queues()
-    sprints = get_all_sprints()
+    success = False
+    res = {}
+    try:
+        sync_data_in_database(False, current_user.assignee_id)
+        success = True
+    except Exception as e:
+        res = {'error': str(e)}
 
-    queues = [{"queue_id": queue.queue_id, "name": queue.name} for queue in queues]
-    sprints = [{"sprint_id": sprint.sprint_id, "name": sprint.name} for sprint in sprints]
+    if success:
+        queues = get_all_queues()
+        sprints = get_all_sprints()
 
-    # queues = [{"queue_id": 10, "name": "abob"}]
+        queues = [{"queue_id": queue.queue_id, "name": queue.name} for queue in queues]
+        sprints = [{"sprint_id": sprint.sprint_id, "name": sprint.name} for sprint in sprints]
+        res = {'success': success, 'queues': queues, 'sprints': sprints}
 
-    return jsonify({'success': success, 'queues': queues, 'sprints': sprints})
+    return jsonify(res)
 
 
 if __name__ == '__main__':

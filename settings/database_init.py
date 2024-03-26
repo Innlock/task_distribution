@@ -275,10 +275,11 @@ def initialize_assignees_dummies():
     db.session.commit()
 
 
-def initialize_database():
+def initialize_database(completely):
     # initialize_assignees()
     initialize_assignees_dummies()
-    initialize_users_dummies()
+    if completely:
+        initialize_users_dummies()
 
     initialize_components_from_tracker()
     initialize_queues_from_tracker()
