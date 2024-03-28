@@ -39,7 +39,7 @@
         <input type="submit" value="Создать распределение" name="distribution"/>
     </form>
     <form method="post" class="form2">
-        <button class="sync" type="button" id="sync">Обновить данные</button>
+        <input class="sync" id="sync" type="submit" value="Обновить данные"/>
     </form>
 </div>
 <div id="status-message">Данные успешно обновлены</div>
@@ -109,7 +109,7 @@
         padding: 1vh;
         border-radius: 1vh;
         display: none;
-        font-size: 3vh;
+        font-size: calc((2.5vh + 2.5vw) / 2);
     }
 
 
@@ -175,6 +175,8 @@
         align-items: center;
         position: relative;
         overflow: hidden;
+        overflow-y: auto;
+        overflow-x: auto;
     }
 
     .form1 {
@@ -203,14 +205,14 @@
     }
 
     .labels {
-        font-size: 2.5vh;
+        font-size: calc((1.5vh + 1.5vw) / 2);
+        width: calc((25vh + 25vw) / 2);
         height: auto;
-        width: 80%;
     }
 
     .selectors {
-        font-size: 3vh;
-        width: 80%;
+        font-size: calc((2vh + 2vw) / 2);
+        width: calc((25vh + 25vw) / 2);
         height: 25%;
         padding: 1vh;
         margin-bottom: 2vh;
@@ -225,7 +227,8 @@
 
 
     input[type="submit"], .sync {
-        font-size: 3vh;
+        font-size: calc((2vh + 2vw) / 2);
+        width: calc((25vh + 25vw) / 2);
         background: #398E89;
         border: none;
         cursor: pointer;
