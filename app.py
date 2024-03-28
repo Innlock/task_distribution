@@ -113,13 +113,13 @@ def distribution():
 
     queue_id, queue_name = queue_text.split("_")
     queue_id = int(queue_id)
-    print(queue_id, queue_name)
 
     sprint_id, sprint_name = None, ""
     if sprint_text:
         sprint_id, sprint_name = sprint_text.split("_")
 
-    distribution_data = get_tasks_distribution(queue_id, sprint_id)
+    user_id = current_user.user_id
+    distribution_data = get_tasks_distribution(user_id, queue_id, sprint_id)
     return render_template('distribution.html', distribution=distribution_data,
                            queue=queue_name, sprint=sprint_name)
 

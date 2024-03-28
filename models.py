@@ -125,14 +125,15 @@ class AssigneesComponents(db.Model):
 class Assignment(db.Model):
     __tablename__ = 'assignment_temp'
     assignment_id = db.Column(db.Integer, primary_key=True)  # Номер распределения на случай если их будет много
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    queue_id = db.Column(db.Integer, db.ForeignKey('queues.queue_id'))
-    name = db.Column(db.String(250))
+    name = db.Column(db.String(250), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    queue_id = db.Column(db.Integer, db.ForeignKey('queues.queue_id'), nullable=False)
+    sprint_id = db.Column(db.Integer, db.ForeignKey('sprints'))
 
 
 # Распределение задач между сотрудниками
-assignee_task_temp = db.Table('assignee_task_temp',
-                              db.Column('task_id', String(24), ForeignKey('tasks.task_id')),
-                              db.Column('assignee_id', String(16), ForeignKey('assignees.assignee_id')),
-                              db.Column('assignment_id', Integer, ForeignKey('assignment_temp.assignment_id'))
-                              )
+class AssigneesTasksTemp(db.Model):
+    __tablename__ = "assignee_task_temp"
+    task_id = Column(String(24), ForeignKey('tasks.task_id'), primary_key=True)
+    assignee_id = Column(String(16), ForeignKey('assignees.assignee_id'), primary_key=True)
+    assignment_id = Column(Integer, ForeignKey('assignment_temp.assignment_id'), primary_key=True)

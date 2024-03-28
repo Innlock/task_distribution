@@ -151,7 +151,7 @@ def distribute_open_tasks(all_components, distribution, assignee_info):
     return distribution
 
 
-def get_tasks_distribution(queue_id, sprint_id=None):
+def get_tasks_distribution(user_id, queue_id, sprint_id=None):
     # Перенести не законченные задачи
     assignees = get_all_assignees()
     distribution = create_template(assignees)
@@ -176,4 +176,5 @@ def get_tasks_distribution(queue_id, sprint_id=None):
     assignee_info = assignees, assignees_work_time, tasks_for_distribution
 
     distribution = distribute_open_tasks(all_components, distribution, assignee_info)
+    temp_save_distribution(distribution, user_id, queue_id, sprint_id)
     return distribution

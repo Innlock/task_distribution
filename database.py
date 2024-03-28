@@ -138,6 +138,25 @@ def get_all_sprints():
     return sprints
 
 
+def temp_save_distribution(distribution, user_id, queue_id, sprint_id):
+    auto_name = "auto_generated"
+    Assignment.query.filter_by(user_id=user_id, queue_id=queue_id, sprint_id=sprint_id,
+                               name=auto_name).delete()
+
+    if sprint_id is None:
+        assignment = Assignment(user_id=user_id, queue_id=queue_id, name=auto_name)
+    else:
+        assignment = Assignment(user_id=user_id, queue_id=queue_id, name=auto_name, sprint_id=sprint_id)
+    db.session.add(assignment)
+    db.session.commit()
+    for assignee, tasks in distribution.items():
+        for task in tasks:
+            temp_dist = AssigneesTasksTemp(task_id=task.task_id, assignee_id=assignee.assignee_id,
+                                           assignment_id=assignment.assignment_id)
+            db.session.add(temp_dist)
+    db.session.commit()
+
+
 # Пока обновляется вся БД
 def sync_data_in_database(completely=True, assignee_id=None):
     if completely:
