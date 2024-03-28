@@ -22,7 +22,8 @@
         <select id="queues" class="selectors" name="queue" required>
             <option class="options" value="" disabled selected>Очередь</option>
             {% for option in queues %}
-                <option class="options" value="{{ option.queue_id }}_{{ option.name }}">{{ option.name }}</option>
+                <option class="options"
+                        value="{{ {"queue_id": option.queue_id, "queue_name": option.name} }}">{{ option.name }}</option>
             {% endfor %}
         </select>
 
@@ -30,11 +31,12 @@
         <select id="sprints" class="selectors" name="sprint">
             <option class="options" value="" disabled selected>Спринт</option>
             {% for option in sprints %}
-                <option class="options" value="{{ option.sprint_id }}_{{ option.name }}">{{ option.name }}</option>
+                <option class="options"
+                        value="{{ {"sprint_id": option.sprint_id, "sprint_name": option.name} }}">{{ option.name }}</option>
             {% endfor %}
         </select>
-
-        <input type="submit" value="Создать распределение"/>
+        <input type="hidden" name="action" value="create_distribution">
+        <input type="submit" value="Создать распределение" name="distribution"/>
     </form>
     <form method="post" class="form2">
         <button class="sync" type="button" id="sync">Обновить данные</button>
@@ -44,45 +46,52 @@
 </body>
 
 <script>
-$(document).ready(function () {
-    var isRequestInProgress = false; // Флаг для отслеживания состояния запроса
+    $(document).ready(function () {
+        var isRequestInProgress = false; // Флаг для отслеживания состояния запроса
 
-    $("#sync").click(function () {
-        if (isRequestInProgress) return; // Если запрос уже выполняется, выходим
+        $("#sync").click(function () {
+            if (isRequestInProgress) return; // Если запрос уже выполняется, выходим
 
-        isRequestInProgress = true; // Устанавливаем флаг, что запрос начался
-        $("#sync").prop("disabled", true).text("Выполняется..."); // Отключаем кнопку и меняем текст
+            isRequestInProgress = true; // Устанавливаем флаг, что запрос начался
+            $("#sync").prop("disabled", true).text("Выполняется..."); // Отключаем кнопку и меняем текст
 
-        $.post("/sync_data", function (data, status) {
-            console.log("Ответ от сервера:", data);
-            if (status === "success" && data.success) {
-                updateOptions(data.queues, data.sprints);
-                $("#status-message").fadeIn().delay(2000).fadeOut();
-            }
-        })
-        .fail(function (xhr, status, error) {
-            console.error("Ошибка при отправке запроса:", error);
-        })
-        .always(function () {
-            isRequestInProgress = false; // Устанавливаем флаг, что запрос завершился
-            $("#sync").prop("disabled", false).text("Обновить данные"); // Включаем кнопку и возвращаем исходный текст
+            $.post("/sync_data", function (data, status) {
+                console.log("Ответ от сервера:", data);
+                if (status === "success" && data.success) {
+                    updateOptions(data.queues, data.sprints);
+                    $("#status-message").fadeIn().delay(2000).fadeOut();
+                }
+            })
+                .fail(function (xhr, status, error) {
+                    console.error("Ошибка при отправке запроса:", error);
+                })
+                .always(function () {
+                    isRequestInProgress = false; // Устанавливаем флаг, что запрос завершился
+                    $("#sync").prop("disabled", false).text("Обновить данные"); // Включаем кнопку и возвращаем исходный текст
+                });
         });
     });
-});
-function updateOptions(queues, sprints) {
-    // Очистим текущие опции в списке очередей и спринтов
-    $("#queues").empty().append('<option class="options" value="" disabled selected>Очередь</option>');
-    $("#sprints").empty().append('<option class="options" value="" disabled selected>Спринт</option>');
 
-    // Добавим новые опции на основе полученных данных
-    queues.forEach(function(queue) {
-        $("#queues").append('<option value="' + queue.queue_id + '_' + queue.name + '">' + queue.name + '</option>');
-    });
+    function updateOptions(queues, sprints) {
+        // Очистим текущие опции в списке очередей и спринтов
+        $("#queues").empty().append('<option class="options" value="" disabled selected>Очередь</option>');
+        $("#sprints").empty().append('<option class="options" value="" disabled selected>Спринт</option>');
 
-    sprints.forEach(function(sprint) {
-        $("#sprints").append('<option value="' + sprint.sprint_id + '_' + sprint.name + '">' + sprint.name + '</option>');
-    });
-}
+        // Добавим новые опции на основе полученных данных
+        queues.forEach(function (queue) {
+            var option = document.createElement("option");
+            option.value = JSON.stringify({ "queue_id": queue.queue_id, "queue_name": queue.name });
+            option.text = queue.name;
+            $("#queues").append(option);
+        });
+
+        sprints.forEach(function (sprint) {
+            var option = document.createElement("option");
+            option.value = JSON.stringify({ "sprint_id": sprint.sprint_id, "sprint_name": sprint.name });
+            option.text = sprint.name;
+            $("#sprints").append(option);
+        });
+    }
 
 </script>
 

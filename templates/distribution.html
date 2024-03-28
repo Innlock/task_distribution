@@ -8,28 +8,30 @@
 
 <body>
 <header class="header">
-    <p class="dist_name">{{ "Распределение для очереди '"+ queue + "'" }}{{ ", спринт '" + sprint + "'" if sprint else "" }}</p>
+    <p class="dist_name">
+        {{ "Распределение для очереди '"+ queue.queue_name + "'" }}{{ ", спринт '" + sprint.sprint_name + "'" if sprint.sprint_name else "" }}</p>
     <div class="dist_buttons">
         <a href="/settings" class="icons" title="Вернуться к выбору очереди">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/return.png') }}"
                  alt='Вернуться к выбору очереди'>
         </a>
-        <button class="icons" title="Сбросить распределение">
+        <button class="icons" title="Сбросить распределение" onclick="submitForm('reset')">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/undo.png') }}"
                  alt='Сбросить распределение'>
         </button>
-        <button class="icons" title="Сохранить распределение">
+        <button class="icons" title="Сохранить распределение" onclick="submitForm('save')">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/save.png') }}"
                  alt='Сохранить распределение'>
         </button>
-        <button class="icons" title="Выбрать сохранненное распределение">
+        <button class="icons" title="Выбрать сохраненное распределение" onclick="submitForm('select')">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/menu.png') }}"
-                 alt='Выбрать сохранненное распределение'>
+                 alt='Выбрать сохраненное распределение'>
         </button>
-        <button class="icons" title="Утвердить распределение">
+        <button class="icons" title="Утвердить распределение" onclick="submitForm('approve')">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/approve.png') }}"
                  alt='Утвердить распределение'>
         </button>
+
         <a href="/logout" class="icons" title="Выйти из аккаунта">
             <img class="icons_img" src="{{ url_for('static', filename='pictures/logout.png') }}"
                  alt='Выйти из аккаунта'>
@@ -78,6 +80,38 @@
 </div>
 
 <script>
+    function submitForm(action) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/distribution';
+
+        console.log("Queue:", {{ queue | tojson }});
+        console.log("Queue:", {{ sprint | tojson }});
+
+        const queueInput = document.createElement('input');
+        queueInput.type = 'hidden';
+        queueInput.name = 'queue';
+        queueInput.value = JSON.stringify({{ queue | tojson }});
+
+        const sprintInput = document.createElement('input');
+        sprintInput.type = 'hidden';
+        sprintInput.name = 'sprint';
+
+        sprintInput.value = JSON.stringify({{ sprint | tojson }});
+
+        const actionInput = document.createElement('input');
+        actionInput.type = 'hidden';
+        actionInput.name = 'action';
+        actionInput.value = action;
+
+        form.appendChild(queueInput);
+        form.appendChild(sprintInput);
+        form.appendChild(actionInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         const tasks = document.querySelectorAll(".task");
 

@@ -125,7 +125,7 @@ class AssigneesComponents(db.Model):
 class Assignment(db.Model):
     __tablename__ = 'assignment_temp'
     assignment_id = db.Column(db.Integer, primary_key=True)  # Номер распределения на случай если их будет много
-    name = db.Column(db.String(250), unique=True, nullable=False)
+    name = db.Column(db.String(250), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     queue_id = db.Column(db.Integer, db.ForeignKey('queues.queue_id'), nullable=False)
     sprint_id = db.Column(db.Integer, db.ForeignKey('sprints'))

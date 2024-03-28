@@ -106,22 +106,55 @@ def logout():
 @app.route('/distribution', methods=['GET', 'POST'])
 @login_required
 def distribution():
+    if request.method == 'GET':
+        return "get"
+
     if request.method == 'POST':
-        pass
-    queue_text = request.form.get('queue')
-    sprint_text = request.form.get('sprint')
+        user_id = current_user.user_id
+        action = request.form['action']
 
-    queue_id, queue_name = queue_text.split("_")
-    queue_id = int(queue_id)
+        if action == 'create_distribution':
+            queue, sprint = get_queue_sprint()
+            distribution_data = get_tasks_distribution(user_id, queue.get('queue_id'), sprint.get('sprint_id'))
+            return render_template('distribution.html', distribution=distribution_data,
+                                   queue=queue, sprint=sprint)
 
-    sprint_id, sprint_name = None, ""
-    if sprint_text:
-        sprint_id, sprint_name = sprint_text.split("_")
+        if action == 'reset':
+            queue, sprint = get_queue_sprint()
+            distribution_data = get_auto_distribution(user_id, queue.get('queue_id'), sprint.get('sprint_id'))
+            if not distribution_data:
+                return "Не найдено распределение или оно пустое"
+            return render_template('distribution.html', distribution=distribution_data,
+                                   queue=queue, sprint=sprint)
 
-    user_id = current_user.user_id
-    distribution_data = get_tasks_distribution(user_id, queue_id, sprint_id)
-    return render_template('distribution.html', distribution=distribution_data,
-                           queue=queue_name, sprint=sprint_name)
+        elif action == 'save':
+            return "save"
+        # выполнить действия для сохранения распределения
+        elif action == 'select':
+            return "select"
+        # выполнить действия для выбора сохраненного распределения
+        elif action == 'approve':
+            return "approve"
+        # выполнить действия для утверждения распределения
+        return "post"
+    return "Ошибка"
+
+
+def get_queue_sprint():
+    queue = request.form.get('queue')
+    sprint = request.form.get('sprint')
+
+    sprint_dict = {'sprint_id': None, 'sprint': None}
+
+    if type(queue) is str:
+        queue = queue.replace("'", '"')
+        queue = json.loads(queue)
+
+    if sprint and type(sprint) is str:
+        sprint = sprint.replace("'", '"')
+        sprint_dict = json.loads(sprint)
+
+    return queue, sprint_dict
 
 
 @app.route('/settings', methods=['GET', 'POST'])

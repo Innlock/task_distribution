@@ -94,7 +94,9 @@ def drop_all_tables():
 
 
 def drop_all_tables_but_users():
-    print("Dropping some tables...")
+    AssigneesTasksTemp.query.delete()
+    Assignment.query.delete()
+
     AssigneesComponents.query.delete()
     AssigneesQueues.query.delete()
 
@@ -110,6 +112,7 @@ def drop_all_tables_but_users():
     Component.query.delete()
     Queue.query.delete()
     db.session.commit()
+    print("Dropping some tables...")
 
 
 def update_tasks_from_tracker(queue=None):
@@ -177,6 +180,46 @@ def sync_data_in_database(completely=True, assignee_id=None):
         # заполнить таблицы, если они только созданы
         if init_fill_tables:
             initialize_database(completely)
+
+
+def create_template(assignees):
+    distribution = {
+        'NotAssigned': []
+    }
+    for assignee in assignees:
+        distribution[assignee] = []
+    return distribution
+
+
+def get_auto_distribution(user_id, queue_id, sprint_id):
+    auto_name = "auto_generated"
+    assignees = Assignee.query.all()
+    distribution = create_template(assignees)
+
+    assignment = Assignment.query.filter(
+        Assignment.user_id == user_id,
+        Assignment.queue_id == queue_id,
+        Assignment.sprint_id == sprint_id,
+        Assignment.name == auto_name
+    ).first()
+
+    if assignment is None:
+        print("No assignment found")
+        return None
+    assignee_tasks = AssigneesTasksTemp.query.filter_by(assignment_id=assignment.assignment_id).all()
+    assignee_ids = [row.assignee_id for row in assignee_tasks]
+    task_ids = [row.task_id for row in assignee_tasks]
+
+    assignees_obj = Assignee.query.filter(Assignee.assignee_id.in_(assignee_ids)).all()
+    assignees = {assignee.assignee_id: assignee for assignee in assignees_obj}
+
+    tasks_obj = Task.query.filter(Task.task_id.in_(task_ids)).all()
+    tasks = {task.task_id: task for task in tasks_obj}
+
+    for assign in assignee_tasks:
+        distribution[assignees.get(assign.assignee_id)].append(tasks.get(assign.task_id))
+    print(distribution)
+    return distribution
 
 
 sync_data_in_database()
